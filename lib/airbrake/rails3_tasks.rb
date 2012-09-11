@@ -13,7 +13,7 @@ namespace :airbrake do
       config.logger = Rails.logger
     end
 
-    require './app/controllers/application_controller'
+    require './app/controllers/public/application_controller'
 
     class AirbrakeTestingException < RuntimeError; end
 
