@@ -30,6 +30,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_config_default :development_lookup, true
     assert_config_default :framework, 'Standalone'
     assert_config_default :async, nil
+    assert_config_default :application_controller, "./app/controllers/application_controller"
   end
 
   should "set GirlFriday-callable for async=true" do
@@ -85,6 +86,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_config_overridable :development_lookup
     assert_config_overridable :logger
     assert_config_overridable :async
+    assert_config_overridable :application_controller
   end
 
   should "have an api key" do
@@ -99,7 +101,7 @@ class ConfigurationTest < Test::Unit::TestCase
      :http_read_timeout, :ignore, :ignore_by_filters, :ignore_user_agent,
      :notifier_name, :notifier_url, :notifier_version, :params_filters,
      :project_root, :port, :protocol, :proxy_host, :proxy_pass, :proxy_port,
-     :proxy_user, :secure, :development_lookup, :async].each do |option|
+     :proxy_user, :secure, :development_lookup, :async, :application_controller].each do |option|
       assert_equal config[option], hash[option], "Wrong value for #{option}"
     end
   end
@@ -199,6 +201,13 @@ class ConfigurationTest < Test::Unit::TestCase
   should 'give a new instance if non defined' do
     Airbrake.configuration = nil
     assert_kind_of Airbrake::Configuration, Airbrake.configuration
+  end
+
+  should 'use the new application_controller if set' do
+    config = Airbrake::Configuration.new
+    custom_application_controller = "./app/controllers/public/application_controller"
+    config.application_controller = custom_application_controller
+    assert_equal custom_application_controller, config.application_controller
   end
 
   def assert_config_default(option, default_value, config = nil)

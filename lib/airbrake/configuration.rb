@@ -7,8 +7,8 @@ module Airbrake
         :http_open_timeout, :http_read_timeout, :ignore, :ignore_by_filters,
         :ignore_user_agent, :notifier_name, :notifier_url, :notifier_version,
         :params_filters, :project_root, :port, :protocol, :proxy_host,
-        :proxy_pass, :proxy_port, :proxy_user, :secure, :use_system_ssl_cert_chain, 
-        :framework, :user_information, :rescue_rake_exceptions].freeze
+        :proxy_pass, :proxy_port, :proxy_user, :secure, :use_system_ssl_cert_chain,
+        :framework, :user_information, :rescue_rake_exceptions, :application_controller].freeze
 
     # The API key for your project, found on the project edit form.
     attr_accessor :api_key
@@ -100,6 +100,9 @@ module Airbrake
     # (boolean or nil; set to nil to catch exceptions when rake isn't running from a terminal; default is nil)
     attr_accessor :rescue_rake_exceptions
 
+    # The application controller being used to catch exceptions
+    attr_accessor :application_controller
+
 
     DEFAULT_PARAMS_FILTERS = %w(password password_confirmation).freeze
 
@@ -152,6 +155,7 @@ module Airbrake
       @framework                = 'Standalone'
       @user_information         = 'Airbrake Error {{error_id}}'
       @rescue_rake_exceptions   = nil
+      @application_controller   = "./app/controllers/application_controller"
     end
 
     # Takes a block and adds it to the list of backtrace filters. When the filters
